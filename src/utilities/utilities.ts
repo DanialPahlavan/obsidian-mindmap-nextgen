@@ -52,7 +52,7 @@ if (!Promise.withResolvers)
     return { promise, resolve, reject } as any
   }
 
-export const nextTick = () => new Promise<void>(setImmediate)
+export const nextTick = () => new Promise<void>(resolve => setTimeout(resolve, 0))
 
 export function* genLog<T>(message: string, generator: Generator<T>) {
   let count = 0
@@ -83,7 +83,7 @@ export function Resolve<T>(fn: (resolve: (v: T) => void) => void): T {
   return result
 }
 
-type AssertPredicate<In, Out extends In> = ((x: In) => x is Out) & { message?: string}
+type AssertPredicate<In, Out extends In> = ((x: In) => x is Out) & { message?: string }
 export function assert<In, Out extends In>(
   predicate: AssertPredicate<In, Out>,
   x: In,
