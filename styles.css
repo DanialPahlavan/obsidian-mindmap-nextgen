@@ -37,20 +37,27 @@
   we use a workaround: we use an SVG transform on the internal <g>
   and foreignObject elements to flip them without breaking the layout. 
 
-  We flip the entire canvas <g>, then un-flip the text inside foreignObjects.
+  To fix dropping text, we flip the internal SVG nodes, not the DOM 
+  foreignObject which breaks in Chromium WebViews. 
+  
+  The easiest way to perform a pure visual RTL flip without layout engines
+  is using `transform: scaleX(-1)` on the wrapper, and then re-flipping 
+  the actual text nodes *inside* the foreignObject.
 */
-.markmap-rtl svg.markmap>g {
-    transform: scaleX(-1) translate(-100%, 0);
+.markmap-rtl svg.markmap {
+    transform: scaleX(-1);
     transform-origin: center;
 }
 
 .markmap-rtl svg.markmap foreignObject {
-    transform: scaleX(-1);
-    transform-origin: center;
-    direction: rtl;
+    /* Do NOT transform foreignObject directly, it breaks bounding boxes */
 }
 
 .markmap-rtl svg.markmap foreignObject>div {
+    /* Re-flip the HTML content inside the foreign object */
+    transform: scaleX(-1);
+    transform-origin: center;
+    direction: rtl;
     display: flex;
     justify-content: flex-start;
     text-align: right;
