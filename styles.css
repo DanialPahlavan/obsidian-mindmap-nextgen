@@ -25,6 +25,23 @@
     display: block;
 }
 
+/* RTL Support Workaround */
+.markmap-rtl svg.markmap {
+    transform: scaleX(-1);
+}
+
+.markmap-rtl .markmap-foreign {
+    transform: scaleX(-1);
+    direction: rtl;
+    text-align: right;
+}
+
+/* Ensure toolbars (if any) are positioned correctly */
+.markmap-rtl .mm-toolbar {
+    left: auto;
+    right: 20px;
+}
+
 .katex-html { display: none }
 
 .workspace-leaf-content[data-type="mindmap-nextgen-plugin"] .view-content {

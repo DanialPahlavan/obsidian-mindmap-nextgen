@@ -22,14 +22,15 @@ export function TabRenderer(containerEl: MindmapTab.View['containerEl']) {
     hasRendered: false
   }
 
-  return { collapseAll, firstRender, render,
+  return {
+    collapseAll, firstRender, render,
     takeScreenshot: () => takeScreenshot(markmap, state.screenshotColors!),
     toolbar: {
       get hidden() { return toolbar.hidden },
-      toggle: () => 
+      toggle: () =>
         toolbar.hidden
-        ? toolbar.hidden = false
-        : toolbar.hidden = true
+          ? toolbar.hidden = false
+          : toolbar.hidden = true
     }
   }
 
@@ -54,7 +55,7 @@ export function TabRenderer(containerEl: MindmapTab.View['containerEl']) {
     if (!state.hasRendered) return
 
     const markdown = content ?? await app.vault.cachedRead(file)
-    
+
     const rootNode = transformMarkdown(markdown)
     const { settings: fileSettings } = splitMarkdown('file', markdown)
     const settings: FileSettings = { ...globalSettings, ...fileSettings }
@@ -62,6 +63,10 @@ export function TabRenderer(containerEl: MindmapTab.View['containerEl']) {
 
     if (settings.titleAsRootNode)
       addTitleToRootNode(rootNode, file.basename)
+
+    settings.direction === 'rtl'
+      ? contentEl.parentElement?.classList.add('markmap-rtl')
+      : contentEl.parentElement?.classList.remove('markmap-rtl')
 
     state.markmapOptions = markmapOptions
 
