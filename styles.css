@@ -1,4 +1,3 @@
-
 /* General */
 
 :root {
@@ -14,7 +13,9 @@
     padding-top: 0;
 }
 
-.mmng-coloring-approach-description .setting-item-description { padding-top: 0 }
+.mmng-coloring-approach-description .setting-item-description {
+    padding-top: 0
+}
 
 
 /* Mindmaps */
@@ -26,13 +27,32 @@
 }
 
 /* RTL Support Workaround */
-.markmap-rtl svg.markmap {
-    transform: scaleX(-1);
+.markmap-rtl .markmap-node {
+    direction: rtl;
+    text-align: right;
 }
 
-.markmap-rtl .markmap-foreign {
+/* 
+  Since Markmap upstream PR #336 calculates coordinates in LTR,
+  we use a workaround: we use an SVG transform on the internal <g>
+  and foreignObject elements to flip them without breaking the layout. 
+
+  We flip the entire canvas <g>, then un-flip the text inside foreignObjects.
+*/
+.markmap-rtl svg.markmap>g {
+    transform: scaleX(-1) translate(-100%, 0);
+    transform-origin: center;
+}
+
+.markmap-rtl svg.markmap foreignObject {
     transform: scaleX(-1);
+    transform-origin: center;
     direction: rtl;
+}
+
+.markmap-rtl svg.markmap foreignObject>div {
+    display: flex;
+    justify-content: flex-start;
     text-align: right;
 }
 
@@ -42,7 +62,9 @@
     right: 20px;
 }
 
-.katex-html { display: none }
+.katex-html {
+    display: none
+}
 
 .workspace-leaf-content[data-type="mindmap-nextgen-plugin"] .view-content {
     padding: 0
@@ -65,10 +87,17 @@
 
 /* Inline mindmaps */
 
-.block-language-markmap { border-radius: 5px }
-.block-language-markmap svg { border-radius: 5px }
+.block-language-markmap {
+    border-radius: 5px
+}
 
-.block-language-markmap { letter-spacing: normal }
+.block-language-markmap svg {
+    border-radius: 5px
+}
+
+.block-language-markmap {
+    letter-spacing: normal
+}
 
 .mmng-highlight-inline .block-language-markmap {
     background-color: var(--code-background);
@@ -92,15 +121,14 @@
 
 /* display inline mindmap resize handle */
 /* override a rule in the obsidian stylesheet which hides workspace-leaf-resize-handle */
-.workspace-split.mod-root
-.workspace-leaf:last-child
-.workspace-leaf-content
-.block-language-markmap
-.workspace-leaf-resize-handle
-{ display: block }
+.workspace-split.mod-root .workspace-leaf:last-child .workspace-leaf-content .block-language-markmap .workspace-leaf-resize-handle {
+    display: block
+}
 
 /* keep resize handle inside block in reading mode */
-.block-language-markmap { position: relative }
+.block-language-markmap {
+    position: relative
+}
 
 
 
@@ -111,6 +139,7 @@
     background-color: inherit;
     height: inherit;
 }
+
 /* reset button style: end */
 
 .markdown-source-view.mod-cm6 .edit-block-button.codeblock-settings-button {
@@ -132,13 +161,18 @@
     height: var(--dialog-max-height)
 }
 
-.mmng-settings-modal .modal-content :first-child { border-top: 0 }
+.mmng-settings-modal .modal-content :first-child {
+    border-top: 0
+}
 
-.modal-close-button { z-index: 2 }
+.modal-close-button {
+    z-index: 2
+}
 
 .mmng-settings-tab {
     padding: 0
 }
+
 .mmng-level-selector {
     position: sticky;
     top: 0;
@@ -182,12 +216,15 @@
     padding-left: var(--size-4-8);
     padding-right: var(--size-4-8);
 }
-.mmng-settings-level-explanation .clickable-icon { display: inline-block }
+
+.mmng-settings-level-explanation .clickable-icon {
+    display: inline-block
+}
 
 /* Toolbars */
 
 .mm-toolbar {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
 }
