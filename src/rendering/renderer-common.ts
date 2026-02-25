@@ -25,7 +25,7 @@ nextTick().then(() => {
 })
 
 
-export const transformer = new Transformer([ ...builtInPlugins, embedPlugin ])
+export const transformer = new Transformer([...builtInPlugins, embedPlugin])
 
 export function transformMarkdown(markdown: string) {
   const { root, features } = transformer.transform(markdown)
@@ -49,7 +49,7 @@ export function loadAssets(features: IFeatures) {
   if (scripts) loadJS(scripts)
   if (styles) loadCSS(styles.filter(s =>
     // @ts-expect-error
-    !s.data?.href.contains('@highlightjs') ))
+    !s.data?.href.contains('@highlightjs')))
 }
 
 export function getOptions(settings: CodeBlockSettings): Partial<IMarkmapOptions> {
@@ -72,12 +72,16 @@ export function getOptions(settings: CodeBlockSettings): Partial<IMarkmapOptions
       'spacingVertical',
       'spacingHorizontal',
     ], settings),
+    ...(settings.direction !== 'default' && {
+      direction: settings.direction,
+      rtl: settings.direction === 'rtl'
+    } as any),
     ...colorFn && { color: colorFn }
   }
 }
 
 export function depthColoring(settings: CodeBlockSettings) {
-  return ({ state: { depth }}: INode) => {
+  return ({ state: { depth } }: INode) => {
     if (settings.color?.length)
       return settings.color[depth % settings.color.length]
 
@@ -126,7 +130,7 @@ class Stylesheet {
 }
 
 class Rule {
-  constructor(private cssRule: CSSStyleRule) {}
+  constructor(private cssRule: CSSStyleRule) { }
 
   removeProperty(name: string) {
     this.cssRule.style.removeProperty(name)

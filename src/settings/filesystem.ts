@@ -5,6 +5,7 @@ import { plugin } from 'src/core/main'
 
 
 export type Coloring = 'depth' | 'branch' | 'single'
+export type Direction = 'default' | 'ltr' | 'rtl'
 export enum ScreenshotBgStyle {
   Transparent = 'transparent',
   Color = 'color',
@@ -13,6 +14,7 @@ export enum ScreenshotBgStyle {
 
 // Default settings
 export const defaultSettings: v2['settings'] = {
+  direction: 'default',
   splitDirection: 'horizontal',
   nodeMinHeight: 16,
   lineHeight: '1em',
@@ -43,6 +45,7 @@ export const defaultSettings: v2['settings'] = {
 }
 
 type SettingsV2 = {
+  direction: Direction
   splitDirection: SplitDirection
   nodeMinHeight: number
   lineHeight: string
@@ -79,21 +82,21 @@ export type v2 = {
 }
 
 const useDefaultsForMissingKeys =
-(data: any): v2 => ({
-  version: '2.0',
-  layout: data?.layout || [],
-  settings: {
-    ...defaultSettings,
-    ...data?.settings
-  }
-})
+  (data: any): v2 => ({
+    version: '2.0',
+    layout: data?.layout || [],
+    settings: {
+      ...defaultSettings,
+      ...data?.settings
+    }
+  })
 
 type OmitFromFileSettings =
-| 'splitDirection'
-| 'screenshotTextColor'
-| 'screenshotTextColorEnabled'
-| 'screenshotBgStyle'
-| 'screenshotBgColor'
+  | 'splitDirection'
+  | 'screenshotTextColor'
+  | 'screenshotTextColorEnabled'
+  | 'screenshotBgStyle'
+  | 'screenshotBgColor'
 
 export type GlobalSettings = v2['settings']
 export type FileSettings = Omit<GlobalSettings, OmitFromFileSettings> & { color?: string[] }
@@ -112,27 +115,27 @@ export let layout: {
 }
 
 plugin.loadData()
-.then(useDefaultsForMissingKeys)
-.then(fsd => {
-  plugin.saveData(fsd)
+  .then(useDefaultsForMissingKeys)
+  .then(fsd => {
+    plugin.saveData(fsd)
 
-  globalSettings = new Proxy<GlobalSettings>(fsd.settings, {
-    get: (_, key: keyof GlobalSettings) => fsd.settings[key],
-    set<K extends keyof GlobalSettings>(_: any, key: K, value: GlobalSettings[K]) {
-      fsd.settings[key] = value
-      events.emit(key, value)
-      plugin.saveData(fsd)
-      return true
+    globalSettings = new Proxy<GlobalSettings>(fsd.settings, {
+      get: (_, key: keyof GlobalSettings) => fsd.settings[key],
+      set<K extends keyof GlobalSettings>(_: any, key: K, value: GlobalSettings[K]) {
+        fsd.settings[key] = value
+        events.emit(key, value)
+        plugin.saveData(fsd)
+        return true
+      }
+    })
+
+    layout = {
+      save(layout: Layout) {
+        fsd.layout = layout
+        plugin.saveData(fsd)
+      },
+      load: () => fsd.layout
     }
+
+    resolve(globalSettings)
   })
-
-  layout = {
-    save(layout: Layout) {
-      fsd.layout = layout
-      plugin.saveData(fsd)
-    },
-    load: () => fsd.layout
-  }
-
-  resolve(globalSettings)
-})

@@ -50,6 +50,13 @@ export default {
       },
     },
     settings: {
+      direction: {
+        name: '文本方向',
+        description: '思维导图节点的文本方向',
+        default: '默认',
+        ltr: '从左到右',
+        rtl: '从右到左',
+      },
       splitDirection: {
         name: '分割方向',
         description: '打开思维导图时分割窗口的方向',
@@ -140,7 +147,7 @@ export default {
       initialExpandLevel: {
         name: '初始展开层级',
         description: '设置思维导图的初始展开层级。0表示所有节点折叠, '
-                   + '1表示只有根节点展开, 以此类推。要展开所有节点，设置为-1',
+          + '1表示只有根节点展开, 以此类推。要展开所有节点，设置为-1',
         placeholder: '示例: 2',
       },
       animationDuration: {

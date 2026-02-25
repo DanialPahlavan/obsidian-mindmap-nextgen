@@ -8,6 +8,16 @@ import { strings } from 'src/translation'
 
 // -- SectionGeneral -- //
 
+const Direction = SettingComponent({
+  name: strings.settings.settings.direction.name,
+  description: strings.settings.settings.direction.description,
+  key: 'direction',
+  control: dropdown(
+    ['default', strings.settings.settings.direction.default],
+    ['ltr', strings.settings.settings.direction.ltr],
+    ['rtl', strings.settings.settings.direction.rtl])
+})
+
 const SplitDirection = SettingComponent({
   name: strings.settings.settings.splitDirection.name,
   description: strings.settings.settings.splitDirection.description,
@@ -46,7 +56,7 @@ const ColoringApproach = SettingComponent({
     ['single', strings.settings.settings.coloring.single])
 })
 
-const Description = (approach: Coloring) => 
+const Description = (approach: Coloring) =>
   HtmlComponent(new Setting(createFragment())
     .setClass('mmng-coloring-approach-description')
     .setDesc(strings.settings.settings.coloring.description[approach])
@@ -111,7 +121,7 @@ const SectionColoringGlobal = () => {
     Description('single'),
     ColorSingle.global(),
   ]
-  const all = [ ...branch, ...depth, ...single ]
+  const all = [...branch, ...depth, ...single]
 
   function setApproach(coloring: Coloring) {
     all.forEach(x => x.node.hidden = true)
@@ -149,11 +159,11 @@ const SectionColoringHeritable = (inherit: GlobalSettings, partial: Partial<Glob
     Description('single'),
     ColorSingle.heritable(inherit, partial),
   ]
-  const all = [ ...branch, ...depth, ...single ]
+  const all = [...branch, ...depth, ...single]
 
   function setApproach(coloring: Coloring) {
     all.forEach(x => x.node.hidden = true)
-    ~{branch, depth, single}[coloring].forEach(x => {
+    ~{ branch, depth, single }[coloring].forEach(x => {
       x.node.hidden = false
       if ('update' in x) (x.update as Function)()
     })
@@ -218,11 +228,11 @@ const ScreenshotTextColor = (settings: Pick<GlobalSettings, 'screenshotTextColor
     .addColorPicker(colPicker => colPicker
       .setValue(settings.screenshotTextColor)
       .onChange(value =>
-        settings.screenshotTextColor = value ))
+        settings.screenshotTextColor = value))
     .addToggle(toggle => toggle
       .setValue(settings.screenshotTextColorEnabled)
       .onChange(value =>
-        settings.screenshotTextColorEnabled = value ))
+        settings.screenshotTextColorEnabled = value))
     .settingEl
   )
 
@@ -238,11 +248,11 @@ const ScreenshotBackgroundStyle = (settings: Pick<GlobalSettings, 'screenshotBgS
       })
       .setValue(settings.screenshotBgStyle)
       .onChange(value =>
-        settings.screenshotBgStyle = value ))
+        settings.screenshotBgStyle = value))
     .addColorPicker(colPicker => colPicker
       .setValue(settings.screenshotBgColor)
       .onChange(value =>
-        settings.screenshotBgColor = value ))
+        settings.screenshotBgColor = value))
     .settingEl
   )
 
@@ -315,6 +325,7 @@ const MaxWidth = SettingComponent({
 
 const GlobalPage = () => fragment([
   fragment([
+    Direction.global(),
     SplitDirection.global(),
     HighlightInlineMindmap.global(),
     TitleAsRootNode.global(),
@@ -348,6 +359,7 @@ const GlobalPage = () => fragment([
 const FilePage = (file: Partial<FileSettings>) => () =>
   fragment([
     fragment([
+      Direction.heritable(globalSettings, file),
       HighlightInlineMindmap.heritable(globalSettings, file),
       TitleAsRootNode.heritable(globalSettings, file),
     ]),
@@ -372,9 +384,10 @@ const FilePage = (file: Partial<FileSettings>) => () =>
     ])
   ])
 
-const CodeBlockPage = (inherit: GlobalSettings, codeBlock: Partial<CodeBlockSettings>) => () => 
+const CodeBlockPage = (inherit: GlobalSettings, codeBlock: Partial<CodeBlockSettings>) => () =>
   fragment([
     fragment([
+      Direction.heritable(inherit, codeBlock),
       HighlightInlineMindmap.heritable(inherit, codeBlock)
     ]),
     SectionColoringHeritable(inherit, codeBlock),

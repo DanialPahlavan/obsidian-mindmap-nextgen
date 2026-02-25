@@ -50,6 +50,13 @@ export default {
       },
     },
     settings: {
+      direction: {
+        name: '文本方向',
+        description: '思維導圖節點的文本方向',
+        default: '默認',
+        ltr: '從左到右',
+        rtl: '從右到左',
+      },
       splitDirection: {
         name: '分割方向',
         description: '打開思維導圖時分割窗口的方向',
@@ -140,7 +147,7 @@ export default {
       initialExpandLevel: {
         name: '初始展開層級',
         description: '設置思維導圖的初始展開層級。0表示所有節點摺疊, '
-                   + '1表示只有根節點展開, 以此類推。要展開所有節點，設置為-1',
+          + '1表示只有根節點展開, 以此類推。要展開所有節點，設置為-1',
         placeholder: '示例: 2',
       },
       animationDuration: {

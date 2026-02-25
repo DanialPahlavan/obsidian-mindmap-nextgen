@@ -57,6 +57,13 @@ export default {
       },
     },
     settings: {
+      direction: {
+        name: 'Text direction',
+        description: 'Direction for mindmap nodes',
+        default: 'Default',
+        ltr: 'Left-to-Right',
+        rtl: 'Right-to-Left',
+      },
       splitDirection: {
         name: 'Split direction',
         description: 'Direction to split the window when opening a mindmap',
@@ -147,7 +154,7 @@ export default {
       initialExpandLevel: {
         name: 'Initial expand level',
         description: 'Sets the initial depth of the mindmap. 0 means all nodes are collapsed, '
-                   + '1 means only the root node is expanded, etc. To expand all nodes, set this to -1',
+          + '1 means only the root node is expanded, etc. To expand all nodes, set this to -1',
         placeholder: 'Example: 2',
       },
       animationDuration: {
